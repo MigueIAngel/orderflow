@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "stock.reserved | stock.released | stock.rejected",
+  "type": "object",
+  "required": ["orderId"],
+  "properties": {
+    "orderId": { "type": "string" },
+    "items": {
+      "type": "array",
+      "description": "Present on stock.reserved and stock.released.",
+      "items": {
+        "type": "object",
+        "required": ["sku", "quantity"],
+        "properties": {
+          "sku": { "type": "string" },
+          "quantity": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "reason": { "type": "string", "description": "Present on stock.rejected." },
+    "sku": { "type": "string", "description": "The first SKU that could not be reserved." }
+  }
+}
