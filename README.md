@@ -13,8 +13,8 @@ Python) that coordinate through **Redis Streams** with a **choreographed saga**,
 **transactional outbox** and **idempotent consumers**, plus a React client (English /
 Spanish) that shows every step of the saga live.
 
-**Live demo:** https://orderflow-demo.onrender.com ·
-**API docs (all services):** https://orderflow-api-demo.onrender.com/docs
+**Live demo:** https://orderflow-demo-sf3g.onrender.com ·
+**API docs (all services):** https://orderflow-api-demo-d22t.onrender.com/docs
 
 > The demo runs on free hosting. If it has been idle, the first request can take up to a
 > minute while the backend wakes up; the page tells you and refreshes by itself.
