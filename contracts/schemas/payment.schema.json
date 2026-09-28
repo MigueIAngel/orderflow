@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "payment.succeeded | payment.failed",
+  "type": "object",
+  "required": ["orderId", "paymentId", "amount"],
+  "properties": {
+    "orderId": { "type": "string" },
+    "paymentId": { "type": "string" },
+    "amount": { "type": "number", "minimum": 0 },
+    "reason": { "type": "string", "description": "Present on payment.failed." }
+  }
+}
