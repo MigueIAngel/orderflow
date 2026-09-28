@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/MigueIAngel/orderflow/contracts/envelope.schema.json",
+  "title": "Event envelope",
+  "type": "object",
+  "required": ["id", "type", "source", "occurredAt", "correlationId", "data"],
+  "properties": {
+    "id": { "type": "string", "format": "uuid" },
+    "type": {
+      "enum": [
+        "order.created",
+        "stock.reserved",
+        "stock.rejected",
+        "stock.released",
+        "payment.succeeded",
+        "payment.failed",
+        "order.confirmed",
+        "order.cancelled"
+      ]
+    },
+    "source": { "enum": ["orders", "inventory", "payments"] },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "correlationId": { "type": "string" },
+    "data": { "type": "object" }
+  }
+}

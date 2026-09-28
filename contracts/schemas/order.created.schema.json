@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "order.created",
+  "type": "object",
+  "required": ["orderId", "customerEmail", "items", "total", "currency", "simulatePaymentFailure"],
+  "properties": {
+    "orderId": { "type": "string" },
+    "customerEmail": { "type": "string", "format": "email" },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["sku", "quantity", "unitPrice"],
+        "properties": {
+          "sku": { "type": "string" },
+          "quantity": { "type": "integer", "minimum": 1 },
+          "unitPrice": { "type": "number", "minimum": 0 }
+        }
+      }
+    },
+    "total": { "type": "number", "minimum": 0 },
+    "currency": { "type": "string", "const": "USD" },
+    "simulatePaymentFailure": {
+      "type": "boolean",
+      "description": "Demo switch: asks the payments service to decline the charge."
+    }
+  }
+}
