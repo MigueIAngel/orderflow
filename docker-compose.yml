@@ -1,0 +1,92 @@
+name: orderflow
+
+x-service-env: &service-env
+  REDIS_URL: redis://redis:6379/0
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: orderflow
+      POSTGRES_PASSWORD: orderflow
+      POSTGRES_DB: orderflow
+    volumes:
+      - ./deploy/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orderflow"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:8-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  inventory:
+    build: ./services/inventory
+    environment:
+      <<: *service-env
+      DATABASE_URL: postgresql+asyncpg://orderflow:orderflow@postgres:5432/inventory
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+
+  payments:
+    build: ./services/payments
+    environment:
+      <<: *service-env
+      DATABASE_URL: postgresql+asyncpg://orderflow:orderflow@postgres:5432/payments
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+
+  orders:
+    build: ./services/orders
+    environment:
+      <<: *service-env
+      DATABASE_URL: postgres://orderflow:orderflow@postgres:5432/orders
+      INVENTORY_URL: http://inventory:8000
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+
+  notifications:
+    build: ./services/notifications
+    environment:
+      <<: *service-env
+    depends_on:
+      redis: { condition: service_healthy }
+
+  gateway:
+    build: ./services/gateway
+    environment:
+      INVENTORY_URL: http://inventory:8000
+      PAYMENTS_URL: http://payments:8000
+      ORDERS_URL: http://orders:3001
+      NOTIFICATIONS_URL: http://notifications:3002
+    ports:
+      - "3000:3000"
+    depends_on:
+      - inventory
+      - payments
+      - orders
+      - notifications
+
+  web:
+    build: ./web
+    ports:
+      - "8080:80"
+    depends_on:
+      - gateway
+
+volumes:
+  pgdata:
+  redisdata:
