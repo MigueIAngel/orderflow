@@ -33,19 +33,24 @@ export function ProductCard({ product, inCart, onAdd, onRestock, restocking }: P
       </div>
       <h3 className="mt-4 font-semibold text-white">{name}</h3>
       <p className="font-mono text-xs text-slate-500">{product.sku}</p>
-      <div className="mt-auto flex items-center justify-between gap-2 pt-4">
-        <span className="text-lg font-semibold">{money(product.price, i18n.language)}</span>
-        <div className="flex gap-2">
-          {product.stock < 5 && (
-            <button type="button" className="btn btn-ghost whitespace-nowrap px-2.5 py-1.5 text-xs" onClick={onRestock} disabled={restocking}>
-              {t('store.restock')}
-            </button>
-          )}
-          <button type="button" className="btn btn-primary px-3 py-1.5" onClick={onAdd}>
+      <div className="mt-auto pt-4">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-lg font-semibold">{money(product.price, i18n.language)}</span>
+          <button type="button" className="btn btn-primary shrink-0 px-3 py-1.5" onClick={onAdd}>
             {t('store.add')}
             {inCart > 0 && <span className="rounded-md bg-white/20 px-1.5 text-xs">{inCart}</span>}
           </button>
         </div>
+        {product.stock < 5 && (
+          <button
+            type="button"
+            className="btn btn-ghost mt-2 w-full py-1.5 text-xs"
+            onClick={onRestock}
+            disabled={restocking}
+          >
+            {t('store.restock')}
+          </button>
+        )}
       </div>
     </article>
   )
