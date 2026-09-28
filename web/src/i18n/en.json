@@ -1,0 +1,140 @@
+{
+  "nav": {
+    "store": "Store",
+    "orders": "Orders",
+    "events": "Live events",
+    "architecture": "Architecture",
+    "docs": "API docs"
+  },
+  "lang": { "switch": "Español", "code": "ES" },
+  "health": {
+    "checking": "Checking services…",
+    "up": "All services up",
+    "degraded": "{{count}}/4 services up",
+    "down": "Services asleep",
+    "title": "Service health"
+  },
+  "wake": {
+    "title": "Waking up the services…",
+    "body": "This demo runs on free hosting, so the backend sleeps when nobody uses it. The first request can take up to a minute. The page will update by itself."
+  },
+  "store": {
+    "title": "Place an order, watch the saga",
+    "subtitle": "Every order travels through four services over Redis Streams: orders → inventory reserves stock → payments charges → orders confirms. Try the edge cases: a product out of stock, or a declined card.",
+    "inStock": "{{count}} in stock",
+    "outOfStock": "Out of stock",
+    "add": "Add",
+    "restock": "Restock +10",
+    "error": "Could not load the catalogue."
+  },
+  "cart": {
+    "title": "Your order",
+    "empty": "Add products to build an order.",
+    "email": "Email",
+    "emailHint": "Any address works, nothing is sent.",
+    "decline": "Simulate a declined card",
+    "declineHint": "Payments will fail and inventory will release the stock (compensation).",
+    "total": "Total",
+    "place": "Place order",
+    "placing": "Sending…",
+    "clear": "Clear",
+    "invalidEmail": "Enter a valid email.",
+    "overStock": "More than available: the order will be rejected by inventory."
+  },
+  "orders": {
+    "title": "Orders",
+    "subtitle": "Latest orders from every visitor. Updates live as events arrive.",
+    "empty": "No orders yet. Place one from the store.",
+    "items_one": "{{count}} item",
+    "items_other": "{{count}} items",
+    "view": "Details"
+  },
+  "status": {
+    "PENDING": "Pending",
+    "STOCK_RESERVED": "Stock reserved",
+    "CONFIRMED": "Confirmed",
+    "CANCELLED": "Cancelled"
+  },
+  "order": {
+    "back": "All orders",
+    "title": "Order {{id}}",
+    "saga": "Saga timeline",
+    "steps": {
+      "placed": "Order placed",
+      "stock": "Stock reserved",
+      "stockRejected": "Stock rejected",
+      "payment": "Payment captured",
+      "paymentFailed": "Payment declined",
+      "confirmed": "Order confirmed",
+      "cancelled": "Order cancelled",
+      "waiting": "Waiting…",
+      "skipped": "Skipped"
+    },
+    "items": "Items",
+    "payment": "Payment",
+    "noPayment": "No payment intent yet.",
+    "reservations": "Stock reservations",
+    "noReservations": "Nothing reserved.",
+    "events": "Events for this order",
+    "unavailable": "Some services did not answer: {{services}}. Showing what is available.",
+    "notFound": "Order not found.",
+    "decline": "Declined card simulated",
+    "via": "via {{service}}"
+  },
+  "events": {
+    "title": "Live event stream",
+    "subtitle": "Every event published on the orderflow:events stream, as received by the notifications service and pushed over Server-Sent Events.",
+    "connected": "Connected",
+    "disconnected": "Reconnecting…",
+    "empty": "Waiting for events. Place an order in another tab to see them arrive.",
+    "earlier": "Earlier events",
+    "email": "email to {{to}}"
+  },
+  "event": {
+    "order_created": "Order placed for {{total}}",
+    "stock_reserved": "Stock reserved",
+    "stock_rejected": "Stock rejected: {{reason}}",
+    "stock_released": "Reserved stock released (compensation)",
+    "payment_succeeded": "Payment of {{amount}} captured",
+    "payment_failed": "Payment declined: {{reason}}",
+    "order_confirmed": "Order confirmed",
+    "order_cancelled": "Order cancelled: {{reason}}"
+  },
+  "reason": {
+    "out_of_stock": "out of stock",
+    "unknown_sku": "unknown product",
+    "card_declined": "card declined",
+    "amount_exceeds_limit": "amount over the card limit",
+    "stock_rejected": "stock rejected",
+    "payment_failed": "payment failed"
+  },
+  "arch": {
+    "title": "How it works",
+    "subtitle": "Five services, one event stream, no distributed transactions.",
+    "live": "Live status",
+    "latency": "{{ms}} ms",
+    "circuit": "circuit {{state}}",
+    "patterns": "Patterns in this project",
+    "p": {
+      "saga": ["Choreographed saga", "Each service reacts to events and publishes the outcome. There is no central orchestrator."],
+      "outbox": ["Transactional outbox", "State changes and their events are committed in the same database transaction, then relayed to Redis."],
+      "idempotency": ["Idempotent consumers", "Consumer groups deliver at least once; each service stores processed event ids and ignores duplicates."],
+      "compensation": ["Compensation", "A declined payment triggers inventory to release the reserved units."],
+      "gateway": ["API gateway", "Routing, request ids, rate limiting, a circuit breaker per service and API composition."],
+      "sse": ["Server-Sent Events", "The notifications service pushes every event to the browser in real time."]
+    },
+    "services": {
+      "gateway": "NestJS · routing, breakers, composition",
+      "orders": "NestJS · order lifecycle, saga state",
+      "inventory": "FastAPI · catalogue, stock reservations",
+      "payments": "FastAPI · payment intents, charges",
+      "notifications": "Fastify · notifications, SSE feed",
+      "redis": "Redis Streams · orderflow:events"
+    }
+  },
+  "footer": {
+    "by": "Built by Miguel Ángel Altamar",
+    "source": "Source code"
+  },
+  "common": { "retry": "Retry", "loading": "Loading…" }
+}

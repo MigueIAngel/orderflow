@@ -1,0 +1,140 @@
+{
+  "nav": {
+    "store": "Tienda",
+    "orders": "Órdenes",
+    "events": "Eventos en vivo",
+    "architecture": "Arquitectura",
+    "docs": "Docs de la API"
+  },
+  "lang": { "switch": "English", "code": "EN" },
+  "health": {
+    "checking": "Revisando servicios…",
+    "up": "Todos los servicios activos",
+    "degraded": "{{count}}/4 servicios activos",
+    "down": "Servicios dormidos",
+    "title": "Estado de los servicios"
+  },
+  "wake": {
+    "title": "Despertando los servicios…",
+    "body": "Esta demo corre en hosting gratuito, así que el backend se duerme cuando nadie lo usa. La primera petición puede tardar hasta un minuto. La página se actualizará sola."
+  },
+  "store": {
+    "title": "Haz una orden y mira el saga",
+    "subtitle": "Cada orden recorre cuatro servicios a través de Redis Streams: órdenes → inventario reserva stock → pagos cobra → órdenes confirma. Prueba los casos límite: un producto sin stock o una tarjeta rechazada.",
+    "inStock": "{{count}} disponibles",
+    "outOfStock": "Agotado",
+    "add": "Agregar",
+    "restock": "Reponer +10",
+    "error": "No se pudo cargar el catálogo."
+  },
+  "cart": {
+    "title": "Tu orden",
+    "empty": "Agrega productos para armar una orden.",
+    "email": "Correo",
+    "emailHint": "Sirve cualquier dirección, no se envía nada.",
+    "decline": "Simular tarjeta rechazada",
+    "declineHint": "Pagos fallará e inventario liberará el stock (compensación).",
+    "total": "Total",
+    "place": "Crear orden",
+    "placing": "Enviando…",
+    "clear": "Vaciar",
+    "invalidEmail": "Ingresa un correo válido.",
+    "overStock": "Más de lo disponible: inventario rechazará la orden."
+  },
+  "orders": {
+    "title": "Órdenes",
+    "subtitle": "Últimas órdenes de todos los visitantes. Se actualiza en vivo con cada evento.",
+    "empty": "Aún no hay órdenes. Crea una desde la tienda.",
+    "items_one": "{{count}} producto",
+    "items_other": "{{count}} productos",
+    "view": "Detalle"
+  },
+  "status": {
+    "PENDING": "Pendiente",
+    "STOCK_RESERVED": "Stock reservado",
+    "CONFIRMED": "Confirmada",
+    "CANCELLED": "Cancelada"
+  },
+  "order": {
+    "back": "Todas las órdenes",
+    "title": "Orden {{id}}",
+    "saga": "Línea de tiempo del saga",
+    "steps": {
+      "placed": "Orden creada",
+      "stock": "Stock reservado",
+      "stockRejected": "Stock rechazado",
+      "payment": "Pago capturado",
+      "paymentFailed": "Pago rechazado",
+      "confirmed": "Orden confirmada",
+      "cancelled": "Orden cancelada",
+      "waiting": "Esperando…",
+      "skipped": "Omitido"
+    },
+    "items": "Productos",
+    "payment": "Pago",
+    "noPayment": "Aún no hay intento de pago.",
+    "reservations": "Reservas de stock",
+    "noReservations": "Nada reservado.",
+    "events": "Eventos de esta orden",
+    "unavailable": "Algunos servicios no respondieron: {{services}}. Se muestra lo disponible.",
+    "notFound": "Orden no encontrada.",
+    "decline": "Tarjeta rechazada simulada",
+    "via": "vía {{service}}"
+  },
+  "events": {
+    "title": "Flujo de eventos en vivo",
+    "subtitle": "Cada evento publicado en el stream orderflow:events, tal como lo recibe el servicio de notificaciones y lo envía por Server-Sent Events.",
+    "connected": "Conectado",
+    "disconnected": "Reconectando…",
+    "empty": "Esperando eventos. Crea una orden en otra pestaña para verlos llegar.",
+    "earlier": "Eventos anteriores",
+    "email": "correo a {{to}}"
+  },
+  "event": {
+    "order_created": "Orden creada por {{total}}",
+    "stock_reserved": "Stock reservado",
+    "stock_rejected": "Stock rechazado: {{reason}}",
+    "stock_released": "Stock reservado liberado (compensación)",
+    "payment_succeeded": "Pago de {{amount}} capturado",
+    "payment_failed": "Pago rechazado: {{reason}}",
+    "order_confirmed": "Orden confirmada",
+    "order_cancelled": "Orden cancelada: {{reason}}"
+  },
+  "reason": {
+    "out_of_stock": "sin stock",
+    "unknown_sku": "producto desconocido",
+    "card_declined": "tarjeta rechazada",
+    "amount_exceeds_limit": "monto sobre el límite de la tarjeta",
+    "stock_rejected": "stock rechazado",
+    "payment_failed": "pago fallido"
+  },
+  "arch": {
+    "title": "Cómo funciona",
+    "subtitle": "Cinco servicios, un stream de eventos, cero transacciones distribuidas.",
+    "live": "Estado en vivo",
+    "latency": "{{ms}} ms",
+    "circuit": "circuito {{state}}",
+    "patterns": "Patrones de este proyecto",
+    "p": {
+      "saga": ["Saga coreografiado", "Cada servicio reacciona a eventos y publica el resultado. No hay orquestador central."],
+      "outbox": ["Outbox transaccional", "Los cambios de estado y sus eventos se guardan en la misma transacción y luego se envían a Redis."],
+      "idempotency": ["Consumidores idempotentes", "Los consumer groups entregan al menos una vez; cada servicio guarda los ids procesados e ignora duplicados."],
+      "compensation": ["Compensación", "Un pago rechazado hace que inventario libere las unidades reservadas."],
+      "gateway": ["API gateway", "Enrutamiento, request ids, rate limiting, circuit breaker por servicio y composición de APIs."],
+      "sse": ["Server-Sent Events", "El servicio de notificaciones envía cada evento al navegador en tiempo real."]
+    },
+    "services": {
+      "gateway": "NestJS · enrutamiento, breakers, composición",
+      "orders": "NestJS · ciclo de vida de la orden, estado del saga",
+      "inventory": "FastAPI · catálogo, reservas de stock",
+      "payments": "FastAPI · intentos de pago, cobros",
+      "notifications": "Fastify · notificaciones, feed SSE",
+      "redis": "Redis Streams · orderflow:events"
+    }
+  },
+  "footer": {
+    "by": "Hecho por Miguel Ángel Altamar",
+    "source": "Código fuente"
+  },
+  "common": { "retry": "Reintentar", "loading": "Cargando…" }
+}

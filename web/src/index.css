@@ -1,0 +1,62 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --color-ink-950: #070b16;
+  --color-ink-900: #0b1020;
+  --color-ink-850: #10172b;
+  --color-ink-800: #151d35;
+  --color-ink-700: #212b4a;
+  --color-ink-600: #334067;
+
+  /* One colour per service, used everywhere the service appears. */
+  --color-svc-gateway: #94a3b8;
+  --color-svc-orders: #818cf8;
+  --color-svc-inventory: #fbbf24;
+  --color-svc-payments: #34d399;
+  --color-svc-notifications: #f472b6;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-ink-950 font-sans text-slate-200 antialiased;
+}
+
+@utility card {
+  @apply rounded-2xl border border-ink-700 bg-ink-900/80;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+@utility btn-primary {
+  @apply bg-indigo-500 text-white hover:bg-indigo-400;
+}
+
+@utility btn-ghost {
+  @apply border border-ink-600 text-slate-200 hover:border-slate-400 hover:bg-ink-800;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@utility animate-pulse-dot {
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@utility animate-slide-in {
+  animation: slide-in 0.35s ease-out;
+}
